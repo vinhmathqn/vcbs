@@ -4,7 +4,7 @@ name: Crawl VCBS and Commit .npy
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 8 * * 1-5"  # tạm thời test: 15:05 ICT (08:05 UTC)
+    - cron: "30 9 * * 1-5"   # 09:30 UTC = 16:30 ICT (VN)
 
 # Cho phép workflow push file vào repo
 permissions:
