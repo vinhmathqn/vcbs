@@ -1,0 +1,50 @@
+name: Crawl VCBS and Commit .npy
+
+# Chạy tay (để test) và chạy theo lịch (phần 2 bên dưới sẽ chỉnh 16:30 ICT)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "5 8 * * 1-5"  # tạm thời test: 15:05 ICT (08:05 UTC)
+
+# Cho phép workflow push file vào repo
+permissions:
+  contents: write
+
+jobs:
+  run-crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run crawler
+        env:
+          TZ: "Asia/Ho_Chi_Minh"
+        run: |
+          mkdir -p data
+          python crawl.py
+          ls -lah data || true
+
+      - name: Commit .npy to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "actions@github.com"
+          if [ -n "$(git status --porcelain data/)" ]; then
+            git add data
+            git commit -m "Daily .npy update $(date +'%Y-%m-%d %H:%M:%S')"
+            git push
+          else
+            echo "No new data to commit."
+          fi
