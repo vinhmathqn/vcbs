@@ -1,0 +1,5 @@
+numpy
+pytz
+lxml
+beautifulsoup4
+selenium
