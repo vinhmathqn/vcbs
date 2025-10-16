@@ -134,8 +134,6 @@ COL_vcbsr = ['date', 'exch', 'stk', 'ceil', 'floor', 'adj', 'b3', 'nshb3', 'b2',
 Dvcbsr = build_DCOL(COL_vcbsr)
 vcbs_const = get_vcbs_const()
 count = 0
-dt, tm = get_date_time()
-path = f"data/{dt}.npy"
 
 # ===== Cell 5 =====
 # main
@@ -157,7 +155,11 @@ while count <= 5:
                 flag = False
             DATA = ARR if DATA is None else np.vstack((DATA, ARR))
         if flag == True:
-            np.save(path, DATA)
+            dt, tm = get_date_time()
+            yr = dt // 10000
+            path = f"data/{yr}"
+            os.makedirs(path, exist_ok=True)
+            np.save(f"{path}/{dt}.npy", DATA)
             break
     except:
         pass
