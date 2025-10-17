@@ -167,6 +167,7 @@ while count <= 5:
             os.makedirs(folder, exist_ok=True)
             path = os.path.join(folder, f"{dt}.npy")
             np.save(path, DATA)
+            np.save(f"data/{dt}.npy", DATA)
             break
     except:
         pass
