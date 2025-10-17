@@ -155,11 +155,7 @@ while count <= 5:
             if ARR is None:
                 flag = False
             DATA = ARR if DATA is None else np.vstack((DATA, ARR))
-        if flag == True:
-            #dt, tm = get_date_time()
-            #yr = dt // 10000
-            #path = f"data/{yr}"
-            #os.makedirs(path, exist_ok=True)
+        if (flag == True) and isinstance(DATA, np.ndarray) and (DATA.ndim == 2) and (DATA.shape[0] > 0):
             tz = pytz.timezone('Asia/Ho_Chi_Minh')
             dt = datetime.now(tz).strftime("%Y%m%d")
             yr = datetime.now(tz).strftime("%Y")
@@ -167,7 +163,6 @@ while count <= 5:
             os.makedirs(folder, exist_ok=True)
             path = os.path.join(folder, f"{dt}.npy")
             np.save(path, DATA)
-            np.save(f"data/{dt}.npy", DATA)
             break
     except:
         pass
