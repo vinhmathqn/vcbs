@@ -4,6 +4,7 @@
 # - Ensure all required libraries are installed before running in GitHub Actions.
 # ===== Cell 1 =====
 # library
+import os
 import numpy as np
 import time
 import pytz
@@ -155,11 +156,17 @@ while count <= 5:
                 flag = False
             DATA = ARR if DATA is None else np.vstack((DATA, ARR))
         if flag == True:
-            dt, tm = get_date_time()
-            yr = dt // 10000
-            path = f"data/{yr}"
-            os.makedirs(path, exist_ok=True)
-            np.save(f"{path}/{dt}.npy", DATA)
+            #dt, tm = get_date_time()
+            #yr = dt // 10000
+            #path = f"data/{yr}"
+            #os.makedirs(path, exist_ok=True)
+            tz = pytz.timezone('Asia/Ho_Chi_Minh')
+            dt = datetime.now(tz).strftime("%Y-%m-%d")
+            yr = datetime.now(tz).strftime("%Y")
+            folder = os.path.join("data", yr)
+            os.makedirs(folder, exist_ok=True)
+            path = os.path.join(folder, f"{dt}.npy")
+            np.save(path, DATA)
             break
     except:
         pass
